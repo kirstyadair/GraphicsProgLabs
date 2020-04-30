@@ -12,7 +12,7 @@ MainGame::MainGame()
 	Display* _gameDisplay = new Display(); //new display
     Mesh* mesh1();
 	Mesh* mesh2();
-	Shader toonShader();
+	//Shader toonShader();
 	//Audio* audioDevice();
 }
 
@@ -34,13 +34,11 @@ void MainGame::initSystems()
 	
 	mesh1.loadModel("..\\res\\monkey3.obj");
 	mesh2.loadModel("..\\res\\monkey3.obj");
-	geomShader.init("..\\res\\shaderGeoText.vert", "..\\res\\shaderGeoText.frag", "..\\res\\shaderGeoText.geom"); //new shader
+	//geomShader.init("..\\res\\shaderGeoText.vert", "..\\res\\shaderGeoText.frag", "..\\res\\shaderGeoText.geom"); //new shader
 
 	
 	myCamera.initCamera(glm::vec3(0, 0, -5), 70.0f, (float)_gameDisplay.getWidth()/_gameDisplay.getHeight(), 0.01f, 1000.0f);
-	//toonShader.Bind();
-	//toonShader.setVec3("cameraPos", glm::vec3(0.0f, 0.0f, 5.0f));
-	counter = 1.0f;
+	counter = 0.0f;
 }
 
 void MainGame::gameLoop()
@@ -105,28 +103,19 @@ bool MainGame::collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2
 //	}
 //}
 
-void MainGame::linkToonShader()
-{
-	//fogShader.setMat4("u_pm", myCamera.getProjection());
-	//fogShader.setMat4("u_vm", myCamera.getProjection());
-
-	//toonShader.setVec3("normal", glm::vec3(0.0f, 0.0f, 0.0f));
-}
-
 void MainGame::drawGame()
 {
-	_gameDisplay.clearDisplay(0, 0.5f, 0.5f, 1.0f);
-	linkToonShader();
+	//geomShader.setFloat("time", counter);
+	_gameDisplay.clearDisplay(0, 0, 0, 1.0f);
 	Texture texture("..\\res\\bricks.jpg"); //load texture
-	Texture texture1("..\\res\\water.jpg"); //load texture
 	
 	transform.SetPos(glm::vec3(sinf(counter), 0.5, 0.0));
 	transform.SetRot(glm::vec3(0.0, 0.0, counter * 5));
 	transform.SetScale(glm::vec3(0.6, 0.6, 0.6));
 
-	geomShader.Bind();
+	//geomShader.Bind();
 	texture.Bind(0);
-	geomShader.Update(transform, myCamera);
+	//geomShader.Update(transform, myCamera);
 	mesh1.draw();
 	mesh1.updateSphereData(*transform.GetPos(), 0.62f);
 	
@@ -135,10 +124,10 @@ void MainGame::drawGame()
 	transform.SetRot(glm::vec3(0.0, 0.0, counter * 5));
 	transform.SetScale(glm::vec3(0.6, 0.6, 0.6));
 
-	geomShader.Update(transform, myCamera);
+	//geomShader.Update(transform, myCamera);
 	mesh2.draw();
 	mesh2.updateSphereData(*transform.GetPos(), 0.62f);
-	counter = counter + 0.02f;
+	counter += 0.01f;
 
 				
 	glEnableClientState(GL_COLOR_ARRAY); 

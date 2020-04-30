@@ -16,11 +16,9 @@ out vec2 TexCoords;
 //Uniform variabe
 uniform float time;
 
-float count;
-
 vec4 explode(vec4 position, vec3 normal)
 {
-//Amout of explosion
+	//Amout of explosion
     float magnitude = 8.0;
 	//Direction of explosion, going along normal
     vec3 direction = normal * ((sin(time) + 1.0) / 2.0) * magnitude; 
@@ -30,7 +28,7 @@ vec4 explode(vec4 position, vec3 normal)
 
 vec3 GetNormal()
 {
-//Getting the normal vector of each vertex
+	//Getting the normal vector of each vertex
    vec3 a = vec3(gl_in[0].gl_Position) - vec3(gl_in[1].gl_Position);
    vec3 b = vec3(gl_in[2].gl_Position) - vec3(gl_in[1].gl_Position);
    //returns the cross product between the two vectors calculated
@@ -39,17 +37,16 @@ vec3 GetNormal()
 
 void main()
 {
-	count = 0.05;
-//Getting normal
+	//Getting normal
     vec3 normal = GetNormal();
-//Setting current vertex position
-    gl_Position = explode(gl_in[0].gl_Position, normal * count);
+	//Setting current vertex position
+    gl_Position = explode(gl_in[0].gl_Position, normal * time);
     TexCoords = gs_in[0].texCoords;
     EmitVertex();
-    gl_Position = explode(gl_in[1].gl_Position, normal * count);
+    gl_Position = explode(gl_in[1].gl_Position, normal * time);
     TexCoords = gs_in[1].texCoords;
     EmitVertex();
-    gl_Position = explode(gl_in[2].gl_Position, normal * count);
+    gl_Position = explode(gl_in[2].gl_Position, normal * time);
     TexCoords = gs_in[2].texCoords;
     EmitVertex();
     EndPrimitive();
