@@ -37,6 +37,10 @@ public:
 	void loadModel(const std::string& filename);
 	void initModel(const IndexedModel& model);
 
+	IndexedModel theModel;
+
+
+
 private:
 
 

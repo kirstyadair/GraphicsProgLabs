@@ -58,7 +58,7 @@ void MainGame::initSystems()
 	overlay.init("..\\res\\bricks.jpg");
 
 	mesh1.loadModel("..\\res\\monkey3.obj");
-	mesh2.loadModel("..\\res\\monkey3.obj");
+	mesh2.loadModel("..\\res\\Fish1.obj");
 	mesh3.loadModel("..\\res\\monkey3.obj");
 	
 	myCamera.initCamera(glm::vec3(0, 0, -10.0), 70.0f, (float)_gameDisplay.getWidth()/_gameDisplay.getHeight(), 0.01f, 1000.0f);
@@ -73,6 +73,7 @@ void MainGame::initSystems()
 		"..\\res\\skybox\\bottom.jpg",
 		"..\\res\\skybox\\front.jpg",
 		"..\\res\\skybox\\back.jpg"
+		
 	};
 	cubemapTexture = skybox.loadCubemap(faces); //Load the cubemap using "faces" into cubemapTextures
 
@@ -126,7 +127,7 @@ void MainGame::initSystems()
 	glGenBuffers(1, &modelVBO);
 	glBindVertexArray(modelVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, modelVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(faces), &faces, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(mesh2.theModel.positions), &mesh2.theModel.positions, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
@@ -302,7 +303,7 @@ void MainGame::drawGame()
 
 	Skybox();
 
-	transform.SetPos(glm::vec3(sinf(counter), 0.5, 0.0));
+	transform.SetPos(glm::vec3(sinf(counter) * 2, 0.5, 0.0));
 	transform.SetRot(glm::vec3(0.0, counter, 0.0));
 	transform.SetScale(glm::vec3(0.6, 0.6, 0.6));
 	
@@ -312,12 +313,9 @@ void MainGame::drawGame()
 	texture.Bind(0);
 	mesh1.draw();
 	
-	
-
-	transform.SetPos(glm::vec3(-sinf(counter), -1.0, -sinf(counter)*5));
-	transform.SetRot(glm::vec3(0.0, counter * 5, 0.0));
-	transform.SetScale(glm::vec3(0.6, 0.6, 0.6));
-	
+	transform.SetPos(glm::vec3(0, 0.5, 0.0));
+	transform.SetRot(glm::vec3(0.0, 0, 0.0));
+	transform.SetScale(glm::vec3(0.1, 0.1, 0.1));
 	shaderReflection.Bind();
 	setReflectionShader();
 	shaderReflection.Update(transform, myCamera);
@@ -334,7 +332,7 @@ void MainGame::drawGame()
 	mesh3.draw();
 
 
-	counter += 0.001f;
+	counter += 0.01f;
 
 	glEnableClientState(GL_COLOR_ARRAY); 
 	glEnd();
