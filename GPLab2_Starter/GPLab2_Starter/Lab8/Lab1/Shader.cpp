@@ -30,6 +30,34 @@ void Shader::init(const std::string& vertFile, const std::string& fragFile)
 	uniforms[TRANSFORM_U] = glGetUniformLocation(program, "transform"); // associate with the location of uniform variable within a program
 }
 
+void Shader::initGeom(const std::string& vertFile, const std::string& fragFile, const std::string& geomFile)
+{
+	program = glCreateProgram(); // create shader program (openGL saves as ref number)
+	shaders[0] = CreateShader(LoadShader(vertFile), GL_VERTEX_SHADER); // create vertex shader
+	shaders[1] = CreateShader(LoadShader(geomFile), GL_GEOMETRY_SHADER); // create geometry shader
+	shaders[2] = CreateShader(LoadShader(fragFile), GL_FRAGMENT_SHADER); // create fragment shader
+
+
+	for (unsigned int i = 0; i < NUM_SHADERS; i++)
+	{
+		glAttachShader(program, shaders[i]); //add all our shaders to the shader program "shaders" 
+	}
+
+	glBindAttribLocation(program, 0, "VertexPosition"); // associate attribute variable with our shader program attribute (in this case attribute vec3 position;)
+	glBindAttribLocation(program, 1, "VertexTexCoord");
+	glBindAttribLocation(program, 2, "VertexNormal");
+
+	glLinkProgram(program); //create executables that will run on the GPU shaders
+	CheckShaderError(program, GL_LINK_STATUS, true, "Error: Shader program linking failed"); // cheack for error
+
+	glValidateProgram(program); //check the entire program is valid
+	CheckShaderError(program, GL_VALIDATE_STATUS, true, "Error: Shader program not valid");
+
+	uniforms[TRANSFORM_U] = glGetUniformLocation(program, "transform"); // associate with the location of uniform variable within a program
+	uniforms[PROJECTIONS] = glGetUniformLocation(program, "projection"); // associate with the location of uniform variable within a program
+	
+}
+
 
 Shader::~Shader()
 {
@@ -50,6 +78,14 @@ void Shader::Update(const Transform& transform, const Camera& camera)
 {
 	glm::mat4 mvp = camera.GetViewProjection() * transform.GetModel();
 	glUniformMatrix4fv(uniforms[TRANSFORM_U], 1, GLU_FALSE, &mvp[0][0]);
+}
+
+void Shader::UpdateGeom(const Transform& transform, const Camera& camera)
+{
+	glm::mat4 model = transform.GetModel();
+	glm::mat4 vp = camera.GetViewProjection();
+	glUniformMatrix4fv(uniforms[TRANSFORM_U], 1, GLU_FALSE, &model[0][0]);
+	glUniformMatrix4fv(uniforms[PROJECTIONS], 1, GLU_FALSE, &vp[0][0]);
 }
 
 

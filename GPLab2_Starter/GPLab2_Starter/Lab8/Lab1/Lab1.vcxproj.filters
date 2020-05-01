@@ -133,6 +133,15 @@
     <None Include="..\res\Fish1.mtl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\res\shaderGeometry.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaderGeometry.geom">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaderGeometry.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\res\monkey3.obj">

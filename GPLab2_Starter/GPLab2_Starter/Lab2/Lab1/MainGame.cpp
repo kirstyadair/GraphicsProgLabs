@@ -13,7 +13,7 @@ MainGame::MainGame()
     Mesh* mesh1();
 	Mesh* mesh2();
 	//Shader toonShader();
-	//Audio* audioDevice();
+	Shader* geomShader();
 }
 
 MainGame::~MainGame()
@@ -34,7 +34,7 @@ void MainGame::initSystems()
 	
 	mesh1.loadModel("..\\res\\monkey3.obj");
 	mesh2.loadModel("..\\res\\monkey3.obj");
-	//geomShader.init("..\\res\\shaderGeoText.vert", "..\\res\\shaderGeoText.frag", "..\\res\\shaderGeoText.geom"); //new shader
+	geomShader.init("..\\res\\shaderGeoText.vert", "..\\res\\shaderGeoText.frag", "..\\res\\shaderGeoText.geom"); //new shader
 
 	
 	myCamera.initCamera(glm::vec3(0, 0, -5), 70.0f, (float)_gameDisplay.getWidth()/_gameDisplay.getHeight(), 0.01f, 1000.0f);
@@ -47,7 +47,7 @@ void MainGame::gameLoop()
 	{
 		processInput();
 		drawGame();
-		collision(mesh1.getSpherePos(), mesh1.getSphereRadius(), mesh2.getSpherePos(), mesh2.getSphereRadius());
+		//collision(mesh1.getSpherePos(), mesh1.getSphereRadius(), mesh2.getSpherePos(), mesh2.getSphereRadius());
 		//playAudio(backGroundMusic, glm::vec3(0.0f,0.0f,0.0f));
 	}
 }
@@ -105,7 +105,7 @@ bool MainGame::collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2
 
 void MainGame::drawGame()
 {
-	//geomShader.setFloat("time", counter);
+	geomShader.setFloat("time", counter);
 	_gameDisplay.clearDisplay(0, 0, 0, 1.0f);
 	Texture texture("..\\res\\bricks.jpg"); //load texture
 	
@@ -113,20 +113,21 @@ void MainGame::drawGame()
 	transform.SetRot(glm::vec3(0.0, 0.0, counter * 5));
 	transform.SetScale(glm::vec3(0.6, 0.6, 0.6));
 
-	//geomShader.Bind();
+	geomShader.Bind();
 	texture.Bind(0);
-	//geomShader.Update(transform, myCamera);
+	geomShader.Update(transform, myCamera);
 	mesh1.draw();
-	mesh1.updateSphereData(*transform.GetPos(), 0.62f);
+	//mesh1.updateSphereData(*transform.GetPos(), 0.62f);
 	
 
 	transform.SetPos(glm::vec3(-sinf(counter), -0.5, 10.0 +(-sinf(counter)*8)));
 	transform.SetRot(glm::vec3(0.0, 0.0, counter * 5));
 	transform.SetScale(glm::vec3(0.6, 0.6, 0.6));
 
-	//geomShader.Update(transform, myCamera);
+	geomShader.Bind();
+	geomShader.Update(transform, myCamera);
 	mesh2.draw();
-	mesh2.updateSphereData(*transform.GetPos(), 0.62f);
+	//mesh2.updateSphereData(*transform.GetPos(), 0.62f);
 	counter += 0.01f;
 
 				

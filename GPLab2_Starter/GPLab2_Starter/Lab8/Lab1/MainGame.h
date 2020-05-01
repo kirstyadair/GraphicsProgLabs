@@ -54,6 +54,7 @@ private:
 	Shader shaderRim;
 	Shader shaderSkybox;
 	Shader shaderReflection;
+	Shader shaderGeometry;
 
 	glm::mat4 modelView;
 

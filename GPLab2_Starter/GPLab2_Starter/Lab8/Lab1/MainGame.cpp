@@ -22,6 +22,7 @@ MainGame::MainGame()
 	Shader* shaderToon();
 	Shader* shaderRim();
 	Shader* shaderReflection();
+	Shader* shaderGeometry();
 }
 
 MainGame::~MainGame() 
@@ -50,6 +51,7 @@ void MainGame::initSystems()
 	shaderToon.init("..\\res\\shaderToon.vert", "..\\res\\shaderToon.frag");
 	shaderRim.init("..\\res\\shaderRim.vert", "..\\res\\shaderRim.frag");
 	shaderReflection.init("..\\res\\shaderReflection.vert", "..\\res\\shaderReflection.frag");
+	shaderGeometry.initGeom("..\\res\\shaderGeometry.vert", "..\\res\\shaderGeometry.frag", "..\\res\\shaderGeometry.geom");
 	//Vertex2D vertices[] = { Vertex2D(glm::vec2(-0.5, 1.0), glm::vec2(0.0, 0.0)),
 	//						Vertex2D(glm::vec2(0.5, 0.5), glm::vec2(1.0, 0.0)),
 	//						Vertex2D(glm::vec2(0.5,-0.5), glm::vec2(1.0, 1.0)),
@@ -299,22 +301,21 @@ void MainGame::blobEffect()
 void MainGame::drawGame()
 {
 	_gameDisplay.clearDisplay(0.0f, 0.0f, 0.0f, 1.0f);
-
+	shaderGeometry.setFloat("time", counter / 10);
 
 	Skybox();
 
 	transform.SetPos(glm::vec3(sinf(counter) * 2, 0.5, 0.0));
 	transform.SetRot(glm::vec3(0.0, counter, 0.0));
 	transform.SetScale(glm::vec3(0.6, 0.6, 0.6));
-	
-	shaderRim.Bind();
-	setRimShader();
-	shaderRim.Update(transform, myCamera);
-	texture.Bind(0);
+
+	shaderToon.Bind();
+	setToonLighting();
+	shaderToon.Update(transform, myCamera);
 	mesh1.draw();
 	
-	transform.SetPos(glm::vec3(0, 0.5, 0.0));
-	transform.SetRot(glm::vec3(0.0, 0, 0.0));
+	transform.SetPos(glm::vec3(sinf(counter) / 2, sinf(counter) / 2, 0.0));
+	transform.SetRot(glm::vec3(0.0, counter / 5, 0.0));
 	transform.SetScale(glm::vec3(0.1, 0.1, 0.1));
 	shaderReflection.Bind();
 	setReflectionShader();
@@ -322,13 +323,12 @@ void MainGame::drawGame()
 	mesh2.draw();
 
 
-	transform.SetPos(glm::vec3(-sinf(counter), -sinf(counter), -sinf(counter)));
-	transform.SetRot(glm::vec3(0.0, counter * 5, 0.0));
+	transform.SetPos(glm::vec3(0, 0, 0));
+	transform.SetRot(glm::vec3(0.0, 0, 0.0));
 	transform.SetScale(glm::vec3(0.6, 0.6, 0.6));
 
-	shaderToon.Bind();
-	setToonLighting();
-	shaderToon.Update(transform, myCamera);
+	shaderGeometry.Bind();
+	shaderGeometry.UpdateGeom(transform, myCamera);
 	mesh3.draw();
 
 
