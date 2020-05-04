@@ -40,8 +40,8 @@ void MainGame::initSystems()
 	_gameDisplay.initDisplay(); 
 	whistle = audioDevice.loadSound("..\\res\\bang.wav");
 	backGroundMusic = audioDevice.loadSound("..\\res\\background.wav");
-	texture.init("..\\res\\bricks.jpg"); //load texture
-	texture1.init("..\\res\\water.jpg"); //load texture
+	texture.init("..\\res\\Fish1Texture.png"); //load texture
+	texture1.init("..\\res\\Fish2Texture.jpg"); //load texture
 
 
 	shaderSkybox.init("..\\res\\shaderSkybox.vert", "..\\res\\shaderSkybox.frag");
@@ -59,9 +59,9 @@ void MainGame::initSystems()
 
 	overlay.init("..\\res\\bricks.jpg");
 
-	mesh1.loadModel("..\\res\\monkey3.obj");
-	mesh2.loadModel("..\\res\\Fish1.obj");
-	mesh3.loadModel("..\\res\\monkey3.obj");
+	mesh1.loadModel("..\\res\\Fish1.obj");
+	mesh2.loadModel("..\\res\\Fish3.obj");
+	mesh3.loadModel("..\\res\\Fish2.obj");
 	
 	myCamera.initCamera(glm::vec3(0, 0, -10.0), 70.0f, (float)_gameDisplay.getWidth()/_gameDisplay.getHeight(), 0.01f, 1000.0f);
 
@@ -305,16 +305,17 @@ void MainGame::drawGame()
 
 	Skybox();
 
-	transform.SetPos(glm::vec3(sinf(counter) * 2, 0.5, 0.0));
+	// Toon/Rim shader
+	transform.SetPos(glm::vec3(sinf(counter) * 2, 3, 0.0));
 	transform.SetRot(glm::vec3(0.0, counter, 0.0));
-	transform.SetScale(glm::vec3(0.6, 0.6, 0.6));
-
+	transform.SetScale(glm::vec3(0.1,0.1,0.1));
 	shaderToon.Bind();
 	setToonLighting();
 	shaderToon.Update(transform, myCamera);
 	mesh1.draw();
-	
-	transform.SetPos(glm::vec3(sinf(counter) / 2, sinf(counter) / 2, 0.0));
+
+	// Reflection shader
+	transform.SetPos(glm::vec3(sinf(counter) / 2, 0, 0.0));
 	transform.SetRot(glm::vec3(0.0, counter / 5, 0.0));
 	transform.SetScale(glm::vec3(0.1, 0.1, 0.1));
 	shaderReflection.Bind();
@@ -322,15 +323,14 @@ void MainGame::drawGame()
 	shaderReflection.Update(transform, myCamera);
 	mesh2.draw();
 
-
-	transform.SetPos(glm::vec3(0, 0, 0));
+	// Geometry shader
+	transform.SetPos(glm::vec3(sinf(counter) / 4, -3, 0));
 	transform.SetRot(glm::vec3(0.0, 0, 0.0));
-	transform.SetScale(glm::vec3(0.6, 0.6, 0.6));
-
+	transform.SetScale(glm::vec3(0.1, 0.1, 0.1));
 	shaderGeometry.Bind();
 	shaderGeometry.UpdateGeom(transform, myCamera);
+	texture1.Bind(0);
 	mesh3.draw();
-
 
 	counter += 0.01f;
 
