@@ -98,8 +98,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\Fish1.mtl" />
-    <None Include="..\res\FishEyeShader.frag" />
-    <None Include="..\res\FishEyeShader.vert" />
     <None Include="..\res\shader.frag" />
     <None Include="..\res\shader.vert" />
     <None Include="..\res\shaderBlur.frag" />
