@@ -43,19 +43,12 @@ void MainGame::initSystems()
 	texture.init("..\\res\\Fish1Texture.png"); //load texture
 	texture1.init("..\\res\\Fish2Texture.jpg"); //load texture
 
-
 	shaderSkybox.init("..\\res\\shaderSkybox.vert", "..\\res\\shaderSkybox.frag");
-
-	shaderPass.init("..\\res\\shaderRim.vert","..\\res\\shaderRim.frag");
+	shaderPass.init("..\\res\\shaderRim.vert", "..\\res\\shaderRim.frag");
 	shaderBlur.init("..\\res\\shaderBlur.vert", "..\\res\\shaderBlur.frag");
-	shaderToon.init("..\\res\\shaderToon.vert", "..\\res\\shaderToon.frag");
-	shaderRim.init("..\\res\\shaderRim.vert", "..\\res\\shaderRim.frag");
 	shaderReflection.init("..\\res\\shaderReflection.vert", "..\\res\\shaderReflection.frag");
 	shaderGeometry.initGeom("..\\res\\shaderGeometry.vert", "..\\res\\shaderGeometry.frag", "..\\res\\shaderGeometry.geom");
-	//Vertex2D vertices[] = { Vertex2D(glm::vec2(-0.5, 1.0), glm::vec2(0.0, 0.0)),
-	//						Vertex2D(glm::vec2(0.5, 0.5), glm::vec2(1.0, 0.0)),
-	//						Vertex2D(glm::vec2(0.5,-0.5), glm::vec2(1.0, 1.0)),
-	//						Vertex2D(glm::vec2(-0.5,-0.5), glm::vec2(0.0, 1.0)) };
+	shaderFishEye.init("..\\res\\FishEyeShader.vert", "..\\res\\FishEyeShader.frag");
 
 	overlay.init("..\\res\\bricks.jpg");
 
@@ -151,7 +144,6 @@ void MainGame::gameLoop()
 	{
 		processInput();
 		drawGame();
-		playAudio(backGroundMusic, glm::vec3(0.0f,0.0f,0.0f));
 	}
 }
 
@@ -188,24 +180,6 @@ void MainGame::Skybox()
 	glDepthFunc(GL_LESS); // set depth function back to default
 }
 
-void MainGame::playAudio(unsigned int Source, glm::vec3 pos)
-{
-	
-	ALint state; 
-	alGetSourcei(Source, AL_SOURCE_STATE, &state);
-	/*
-	Possible values of state
-	AL_INITIAL
-	AL_STOPPED
-	AL_PLAYING
-	AL_PAUSED
-	*/
-	if (AL_PLAYING != state)
-	{
-		//audioDevice.playSound(Source, pos);
-	}
-}
-
 void MainGame::setADSLighting()
 {
 	modelView = transform.GetModel() * myCamera.GetView();
@@ -227,17 +201,6 @@ void MainGame::setADSLighting()
 	shaderPass.setFloat("Shininess", 0.5);
 }
 
-void MainGame::setToonLighting()
-{
-	shaderToon.setVec3("lightDir", glm::vec3(0.5, 0.5, 0.5));
-}
-
-void MainGame::setRimShader()
-{
-	shaderRim.setMat4("u_vm", myCamera.GetView());
-	shaderRim.setMat4("u_pm", myCamera.GetProjection());
-}
-
 void MainGame::setReflectionShader()
 {
 	shaderReflection.setMat4("model", transform.GetModel());
@@ -251,6 +214,15 @@ void MainGame::setReflectionShader()
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 }
+
+
+void MainGame::setFishEyeShader()
+{
+	shaderFishEye.setMat4("model", transform.GetModel());
+	shaderFishEye.setMat4("view", myCamera.GetView());
+	shaderFishEye.setMat4("projection", myCamera.GetProjection());
+}
+
 
 
 void MainGame::blobEffect()
@@ -309,10 +281,11 @@ void MainGame::drawGame()
 	transform.SetPos(glm::vec3(sinf(counter) * 2, 3, 0.0));
 	transform.SetRot(glm::vec3(0.0, counter, 0.0));
 	transform.SetScale(glm::vec3(0.1,0.1,0.1));
-	shaderToon.Bind();
-	setToonLighting();
-	shaderToon.Update(transform, myCamera);
-	mesh1.draw();
+	shaderFishEye.Bind();
+	setFishEyeShader();
+	shaderFishEye.Update(transform, myCamera);
+	texture1.Bind(0);
+	mesh3.draw();
 
 	// Reflection shader
 	transform.SetPos(glm::vec3(sinf(counter) / 2, 0, 0.0));
@@ -329,8 +302,8 @@ void MainGame::drawGame()
 	transform.SetScale(glm::vec3(0.1, 0.1, 0.1));
 	shaderGeometry.Bind();
 	shaderGeometry.UpdateGeom(transform, myCamera);
-	texture1.Bind(0);
-	mesh3.draw();
+	texture.Bind(0);
+	mesh1.draw();
 
 	counter += 0.01f;
 

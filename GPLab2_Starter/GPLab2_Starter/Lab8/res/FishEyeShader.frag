@@ -1,4 +1,4 @@
-version 120
+#version 120
 uniform sampler2D tex0;
 varying vec4 Vertex_UV;
 const float PI = 3.1415926535;

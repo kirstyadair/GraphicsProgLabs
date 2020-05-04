@@ -25,12 +25,10 @@ private:
 	void processInput();
 	void gameLoop();
 	void drawGame();
-	void playAudio(unsigned int Source, glm::vec3 pos);
-	void blobEffect();
 	void setADSLighting();
-	void setToonLighting();
-	void setRimShader();
 	void setReflectionShader();
+	void setFishEyeShader();
+	void blobEffect();
 
 	void Skybox();
 
@@ -48,13 +46,12 @@ private:
 	Texture skybox;
 
 	Overlay overlay;
-	Shader shaderPass;
-	Shader shaderBlur;
-	Shader shaderToon;
-	Shader shaderRim;
 	Shader shaderSkybox;
 	Shader shaderReflection;
 	Shader shaderGeometry;
+	Shader shaderFishEye;
+	Shader shaderPass;
+	Shader shaderBlur;
 
 	glm::mat4 modelView;
 
