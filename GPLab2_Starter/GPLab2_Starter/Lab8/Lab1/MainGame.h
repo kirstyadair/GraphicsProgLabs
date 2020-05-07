@@ -25,11 +25,7 @@ private:
 	void processInput();
 	void gameLoop();
 	void drawGame();
-	void playAudio(unsigned int Source, glm::vec3 pos);
-	void blobEffect();
-	void setADSLighting();
-	void setToonLighting();
-	void setRimShader();
+	void setNormalShader();
 	void setReflectionShader();
 
 	void Skybox();
@@ -44,25 +40,18 @@ private:
 	Mesh mesh3;
 
 	Texture texture;
-	Texture texture1;
 	Texture skybox;
 
 	Overlay overlay;
-	Shader shaderPass;
-	Shader shaderBlur;
-	Shader shaderToon;
-	Shader shaderRim;
 	Shader shaderSkybox;
 	Shader shaderReflection;
 	Shader shaderGeometry;
+	Shader shaderNormals;
 
 	glm::mat4 modelView;
 
 	Camera myCamera;
-	Audio audioDevice;
 
 	float counter;
-	unsigned int whistle;
-	unsigned int backGroundMusic;
 };
 

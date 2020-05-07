@@ -105,6 +105,9 @@
     <None Include="..\res\shaderGeometry.frag" />
     <None Include="..\res\shaderGeometry.geom" />
     <None Include="..\res\shaderGeometry.vert" />
+    <None Include="..\res\shaderNormals.frag" />
+    <None Include="..\res\shaderNormals.geom" />
+    <None Include="..\res\shaderNormals.vert" />
     <None Include="..\res\shaderOL.frag" />
     <None Include="..\res\shaderOL.vert" />
     <None Include="..\res\shaderReflection.frag" />

@@ -142,6 +142,15 @@
     <None Include="..\res\shaderGeometry.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\res\shaderNormals.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaderNormals.geom">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaderNormals.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\res\monkey3.obj">
